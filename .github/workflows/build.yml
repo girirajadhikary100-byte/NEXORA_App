@@ -23,11 +23,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev automake
 
-      - name: Install Buildozer & Prepare Icon
+      - name: Install Buildozer & Prepare Config
         run: |
           pip install --upgrade pip==24.0 "setuptools<70.0" wheel
           pip install buildozer cython==0.29.36 virtualenv pillow
           python3 -c 'from PIL import Image; Image.open("logo.png").convert("RGBA").resize((512, 512)).save("logo.png", "PNG")'
+          sed -i '/android.ndk =/d' buildozer.spec
           sed -i 's/p4a.branch = master/p4a.branch = develop/g' buildozer.spec
 
       - name: Build APK with Buildozer
