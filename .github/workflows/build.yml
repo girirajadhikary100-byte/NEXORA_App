@@ -29,7 +29,9 @@ jobs:
           pip install buildozer cython==0.29.36 virtualenv pillow
           python3 -c 'from PIL import Image; Image.open("logo.png").convert("RGBA").resize((512, 512)).save("logo.png", "PNG")'
           sed -i '/android.ndk =/d' buildozer.spec
-          sed -i 's/p4a.branch = master/p4a.branch = develop/g' buildozer.spec
+          sed -i '/p4a.branch =/d' buildozer.spec
+          echo "android.ndk = 26b" >> buildozer.spec
+          echo "p4a.branch = develop" >> buildozer.spec
 
       - name: Build APK with Buildozer
         run: |
