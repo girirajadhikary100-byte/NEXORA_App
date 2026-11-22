@@ -34,7 +34,7 @@ jobs:
           pip install --upgrade pip==24.0 wheel "setuptools<70.0"
           pip install buildozer cython==0.29.36 virtualenv pillow
           python3 -c 'from PIL import Image; Image.open("logo.png").convert("RGBA").resize((512, 512)).save("logo.png", "PNG")'
-          sed -i 's/requirements = .*/requirements = python3==3.11.6,hostpython3==3.11.6,kivy==2.3.1,plyer,pyjnius,openssl,certifi/g' buildozer.spec
+          sed -i 's/requirements = .*/requirements = python3==3.11.6,hostpython3==3.11.6,kivy==2.3.1,openssl,certifi/g' buildozer.spec
           sed -i '/android\.ndk/d' buildozer.spec
           sed -i '/p4a\.branch/d' buildozer.spec
           echo "android.ndk = 25b" >> buildozer.spec
