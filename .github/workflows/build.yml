@@ -23,19 +23,22 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev automake
 
-      - name: Install Buildozer & Pin Python 3.11
+      - name: Install Buildozer & Configure Build
         run: |
           pip install --upgrade pip==24.0 wheel "setuptools<70.0"
           pip install buildozer cython==0.29.36 virtualenv pillow
           python3 -c 'from PIL import Image; Image.open("logo.png").convert("RGBA").resize((512, 512)).save("logo.png", "PNG")'
-          sed -i 's/requirements = .*/requirements = python3==3.11.6,hostpython3==3.11.6,kivy==2.3.0,plyer,pyjnius,openssl,certifi/g' buildozer.spec
-          sed -i '/android.ndk =/d' buildozer.spec
-          sed -i '/p4a.branch =/d' buildozer.spec
-          echo "android.ndk = 26b" >> buildozer.spec
-          echo "p4a.branch = develop" >> buildozer.spec
+          sed -i 's/requirements = .*/requirements = python3==3.11.6,hostpython3==3.11.6,kivy==2.3.1,plyer,pyjnius,openssl,certifi/g' buildozer.spec
+          sed -i '/android\.ndk/d' buildozer.spec
+          sed -i '/p4a\.branch/d' buildozer.spec
+          echo "android.ndk = 25b" >> buildozer.spec
+          echo "p4a.branch = master" >> buildozer.spec
 
       - name: Build APK with Buildozer
+        env:
+          CFLAGS: "-Wno-error=incompatible-function-pointer-types"
         run: |
+          rm -rf .buildozer
           yes | buildozer -v android debug
 
       - name: Upload APK
